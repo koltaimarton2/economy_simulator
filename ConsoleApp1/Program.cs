@@ -7,6 +7,8 @@ namespace ConsoleApp1
         private static List<string> options = new List<string>();
         private static List<string> sellerOptions = new List<string>();
         private static List<string> buyerOptions = new List<string>();
+
+        public static Market market = new Market();
         static void Main(string[] args)
         {
             Menu();
@@ -50,8 +52,7 @@ namespace ConsoleApp1
                 index = Move(keyinfo, index, options);
                 if (keyinfo.Key == ConsoleKey.Enter)
                 {
-                    Console.WriteLine(index);
-                    Console.ReadKey();
+
                     Console.Clear();
                     switch (index)
                     {
@@ -65,12 +66,49 @@ namespace ConsoleApp1
 
                                 if (keyinfo.Key == ConsoleKey.Enter)
                                 {
+                                    Console.Clear();
+                                    string title = "";
+                                    string name = " ";
+                                    string category = " ";
+                                    double basePrice = -1;
+                                    int supply = -1;
+                                    List<Product> products = new List<Product>();
+                                    switch (index)
+                                    {
+                                        case 0:
+                                            Console.Write("Seller's name: ");
+                                            title = Console.ReadLine();
+                                            
+                                            break;
+                                        case 1:
+                                            
 
+                                            do
+                                            {
+                                                Console.Write("Product's name: ");
+                                                name = Console.ReadLine();
+                                                Console.Write($"{name}'s category: ");
+                                                category = Console.ReadLine() ;
+                                                Console.Write($"{name}'s base price: ");
+                                                basePrice = Double.Parse(Console.ReadLine());
+                                                Console.Write($"{name}'s supply: ");
+                                                supply = int.Parse(Console.ReadLine());
+
+                                                Product product = new Product(name,basePrice, category, supply);
+                                                products.Add(product);
+
+                                            } while (name != "" && category != "" && basePrice != -1 && supply != -1);
+                                            break;
+                                    }
+                                    Seller seller = new Seller(title);
+                                    seller.products = products;
+                                    market.sellers.Add(seller);
                                 }
 
                                 if (keyinfo.Key == ConsoleKey.LeftArrow)
                                 {
                                     Console.Clear();
+                                    index = 0;
                                     WriteMenu(options, options[0]);
                                     break;
                                 }

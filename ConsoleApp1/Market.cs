@@ -16,17 +16,6 @@ namespace ConsoleApp1
             buyers = new List<Buyer>();
             sellers = new List<Seller>();
         }
-        
-
-        public void AddBuyer(Buyer buyer)
-        {
-            buyers.Add(buyer);
-        }
-
-        public void AddSeller(Seller seller)
-        {
-            sellers.Add(seller);
-        }
 
         public void Simulate(int rounds)
         {
