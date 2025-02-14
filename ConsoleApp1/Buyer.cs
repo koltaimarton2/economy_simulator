@@ -8,6 +8,26 @@ namespace ConsoleApp1
 {
     internal class Buyer
     {
-        public float money { get; set; }
+        public string name {  get; set; }
+        public double budget { get; set; }
+
+        public Buyer(string _name, double _budget)
+        {
+            name = _name;
+            budget = _budget;
+        } 
+
+        public void buyProduct(Product product)
+        {
+            if (budget - product.actualPrice >= 0)
+            {
+                budget -= product.actualPrice;
+                product.supply--;
+            }
+            else
+            {
+                throw new Exception($"{name} doesn't have enough money.");
+            }
+        }
     }
 }

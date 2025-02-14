@@ -12,5 +12,16 @@ namespace ConsoleApp1
         public List<Product> products { get; set; }
 
 
+        public Seller(string _name)
+        {
+            name = _name;
+            products = new List<Product>();
+        }
+
+       public void addProduct(Product product)
+        {
+            products.Add(product);
+        }
+
     }
 }
