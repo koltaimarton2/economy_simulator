@@ -13,7 +13,12 @@ namespace ConsoleApp1
 
         public Action? MenuHandler { get; set; }
 
-        public Menu(string Caption = "", List<Menu>? Items = null, Action? EventHandler = null) { this.Caption = Caption; this.Items = Items; MenuHandler = EventHandler;  }
+        public Menu(string Caption = "", List<Menu>? Items = null, Action? EventHandler = null )
+        {
+            this.Caption = Caption; 
+            this.Items = Items; 
+            MenuHandler = EventHandler;  
+        }
     }
 
     internal class Program
@@ -25,6 +30,7 @@ namespace ConsoleApp1
         private static Menu options = new Menu();
         private static List<Menu> sellerOptions = new List<Menu>();
         private static List<Menu> buyerOptions = new List<Menu>();
+        private static List<Menu> Options = new List<Menu>();
 
         public static Market market = new Market();
         static void Main(string[] args)
@@ -34,11 +40,44 @@ namespace ConsoleApp1
 
         static void SetBuyerName()
         {
-            Console.WriteLine("SetBuyerName");
+            Console.Clear();
+
+            string name = "";
+
+
+            do
+            {
+                Console.Write("Buyer's name: ");
+                try
+                {
+                    name = Console.ReadLine();
+                }
+                catch
+                {
+                    Console.WriteLine("Incorrect format.");
+                }
+
+            } while (name == "" );
+
+
+            //market.buyers.Add(new Buyer(name, budget));
+
         }
         static void AddBudget()
         {
-            Console.WriteLine("AddBudget");
+            double budget = -1.0;
+            do
+            {
+            Console.Write("Buyer's budget: ");
+            try
+            {
+                budget = Double.Parse(Console.ReadLine());
+            }
+            catch
+            {
+                Console.WriteLine("Incorrect format.");
+            }
+            }while (budget == -1.0);
         }
 
         static void Menu()
@@ -80,7 +119,11 @@ namespace ConsoleApp1
                 {
                     case ConsoleKey.Enter:
                         {
-                            if (currentMenu.Items[index].MenuHandler != null) currentMenu.Items[index].MenuHandler();
+                            if (currentMenu.Items[index].MenuHandler != null)
+                            {
+                                currentMenu.Items[index].MenuHandler();
+                                WriteMenu(currentMenu, currentMenu.Items[index]);
+                            }
                             else
                             if (currentMenu.Items[index].Items != null)
                             {
@@ -241,14 +284,13 @@ namespace ConsoleApp1
         {
             if (menu.Items == null) return;
             Console.Clear();
-
             foreach (Menu option in menu.Items)
             {
                 if (option == selectedOption)
                 {
                     //Console.BackgroundColor = ConsoleColor.White;
                     //Console.ForegroundColor = ConsoleColor.Black;
-                    Console.WriteLine("**> " + option.Caption);
+                    Console.WriteLine("> " + option.Caption);
                 }
                 else
                 {
