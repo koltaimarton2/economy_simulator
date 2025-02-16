@@ -1,12 +1,30 @@
 ﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace ConsoleApp1
 {
+
+    internal class Menu
+    {
+        public string Caption { get; set; }
+        public List<Menu>? Items { get; set; }
+        public Menu parentMenu { get; set; }
+        public int parentIndex { get; set; }
+
+        public Action? MenuHandler { get; set; }
+
+        public Menu(string Caption = "", List<Menu>? Items = null, Action? EventHandler = null) { this.Caption = Caption; this.Items = Items; MenuHandler = EventHandler;  }
+    }
+
     internal class Program
-    {   
-        private static List<string> options = new List<string>();
-        private static List<string> sellerOptions = new List<string>();
-        private static List<string> buyerOptions = new List<string>();
+    {
+        //private static List<string> options = new List<string>();
+        //private static List<string> sellerOptions = new List<string>();
+        //private static List<string> buyerOptions = new List<string>();
+        //private static List<MenuItem> mainMenu = new List<MenuItem>();
+        private static Menu options = new Menu();
+        private static List<Menu> sellerOptions = new List<Menu>();
+        private static List<Menu> buyerOptions = new List<Menu>();
 
         public static Market market = new Market();
         static void Main(string[] args)
@@ -14,45 +32,84 @@ namespace ConsoleApp1
             Menu();
         }
 
+        static void SetBuyerName()
+        {
+            Console.WriteLine("SetBuyerName");
+        }
+        static void AddBudget()
+        {
+            Console.WriteLine("AddBudget");
+        }
 
         static void Menu()
         {
-            options = new List<string>
-            {
-                "Add new seller",
-                "Add new buyer",
-                "Simulate market",
+            sellerOptions =new List<Menu> {
+                new Menu("Add name"),
+                new Menu("Add products")
             };
 
-            sellerOptions = new List<string>
-            {
-                "Add name",
-                "Add products"
+            buyerOptions = new List<Menu> {
+                new Menu("Add name", null, SetBuyerName),
+                new Menu("Add budget", null, AddBudget)
             };
 
-            buyerOptions = new List<string>
-            {
-                "Add name",
-                "Add budget"
-            };
+            options = new Menu("", new List<Menu> {
+                new Menu("Add new seller", sellerOptions),
+                new Menu("Add new buyer", buyerOptions),
+                new Menu("Simulate market"),
+            });
 
-            
-
-
-            WriteMenu(options, options[0]);
-            
             int index = 0;
+            Menu currentMenu = options;
+
+            WriteMenu(currentMenu, currentMenu.Items[index]);
+                       
 
             ConsoleKeyInfo keyinfo;
+            ConsoleKey currentKey;
 
             do
             {
-              
-                keyinfo = Console.ReadKey();
-                index = Move(keyinfo, index, options);
-                if (keyinfo.Key == ConsoleKey.Enter)
-                {
+                if (currentMenu == null) break;
 
+                keyinfo = Console.ReadKey();
+                currentKey = keyinfo.Key;
+
+                index = Move(keyinfo, index, currentMenu);
+                switch(currentKey)
+                {
+                    case ConsoleKey.Enter:
+                        {
+                            if (currentMenu.Items[index].MenuHandler != null) currentMenu.Items[index].MenuHandler();
+                            else
+                            if (currentMenu.Items[index].Items != null)
+                            {
+                                currentMenu.Items[index].parentMenu = currentMenu;
+                                currentMenu.Items[index].parentIndex = index;
+                                currentMenu = currentMenu.Items[index];
+                                index = 0;
+                                if (currentMenu != null)
+                                    WriteMenu(currentMenu, currentMenu.Items[index]);
+                            }
+                            break;
+                        }
+                    case ConsoleKey.LeftArrow:
+                        {
+                            if (currentMenu.parentMenu != null)
+                            {
+                                int idx = currentMenu.parentIndex;
+                                currentMenu = currentMenu.parentMenu;
+                                index = idx;
+                                if (currentMenu != null)
+                                    WriteMenu(currentMenu, currentMenu.Items[index]);
+                                currentKey = ConsoleKey.NoName;
+                            }
+                            break;
+                        }
+                }
+
+                /*if (keyinfo.Key == ConsoleKey.Enter)
+                {
                     Console.Clear();
                     switch (index)
                     {
@@ -134,11 +191,11 @@ namespace ConsoleApp1
 
                             break;
                     }
-                }
-                
+                }*/
 
-                
-            } while (keyinfo.Key != ConsoleKey.Escape);
+
+
+            } while (currentKey != ConsoleKey.Escape);
         
         }
 
@@ -147,54 +204,57 @@ namespace ConsoleApp1
 
 
 
-        static int Move(ConsoleKeyInfo keyinfo, int index, List<string> menu)
+        static int Move(ConsoleKeyInfo keyinfo, int index, Menu menu)
         {
-            string selectedOption = menu[0];
-            if (keyinfo.Key == ConsoleKey.DownArrow)
+            if (menu.Items == null) return 0;
+            Menu selectedOption = menu.Items[index];
+            switch(keyinfo.Key)
             {
-                if (index + 1 < menu.Count)
-                {
-                    index++;
-                    selectedOption = menu[index];
-                    WriteMenu(menu, selectedOption);
-                    return index;
-                }
-                return index;
+                case ConsoleKey.DownArrow:
+                    {
+                        if (index + 1 < menu.Items.Count)
+                        {
+                            index++;
+                            selectedOption = menu.Items[index];
+                            WriteMenu(menu, selectedOption);
 
+                        }
+                        break;
+                    }
+                case ConsoleKey.UpArrow:
+                    {
+                        if (index - 1 > -1)
+                        {
+                            index--;
+                            selectedOption = menu.Items[index];
+                            WriteMenu(menu, selectedOption);
+                        }
+                        break;
+                    }
+                    
             }
 
-            if (keyinfo.Key == ConsoleKey.UpArrow)
-            {
-                if (index - 1 > -1)
-                {
-                    index--;
-                    selectedOption = menu[index];
-                    WriteMenu(menu, selectedOption);
-                    return index;
-                }
-                return 0;
-            }
-            else return 0;
-
+            return index;
         }
 
-        static void WriteMenu(List<string> menu, string selectedOption)
+        static void WriteMenu(Menu menu, Menu selectedOption)
         {
+            if (menu.Items == null) return;
             Console.Clear();
 
-            foreach (string option in menu)
+            foreach (Menu option in menu.Items)
             {
                 if (option == selectedOption)
                 {
                     //Console.BackgroundColor = ConsoleColor.White;
                     //Console.ForegroundColor = ConsoleColor.Black;
-                    Console.WriteLine("> " + option);
+                    Console.WriteLine("**> " + option.Caption);
                 }
                 else
                 {
                     //Console.BackgroundColor = ConsoleColor.Black;
                     //Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine(" " + option);
+                    Console.WriteLine(" " + option.Caption);
                 }
             }
         }
