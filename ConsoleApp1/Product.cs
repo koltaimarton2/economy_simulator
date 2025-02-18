@@ -8,12 +8,16 @@ namespace ConsoleApp1
 {
     internal class Product
     {
+        public double priceStep = 0.15;
         public string name { get; private set; }
+
         public double basePrice { get; set; }
 
         public double actualPrice { get; set; }
         public string category { get; set; }
         public int supply { get; set; }
+
+        public int demand { get; set; }
 
         public Product(string _name, double _basePrice, string _category, int _supply)
         {
@@ -22,20 +26,29 @@ namespace ConsoleApp1
             actualPrice = basePrice;
             category = _category;
             supply = _supply;
+            demand = 50;
         }
-        public void determineDemand(int demand)
+        public double adjustPriceAndDemand(int marketDemand)
         {
-            if (demand > supply)
+            double lastPrice = actualPrice;
+            if (marketDemand > supply)
             {
-                actualPrice *= 1.1;
+                actualPrice *= 1 + priceStep;
+                if (demand <= 100)
+                demand++;
+                return actualPrice - lastPrice;
+
             }
-            else if (demand < actualPrice)
+            else if (marketDemand < supply)
             {
-                actualPrice *= 0.9;
+                actualPrice *= 1 - priceStep;
+                if (demand > 0)
+                demand--;
+                return actualPrice - lastPrice;
             }
             else
             {
-                throw new Exception("Price stayed the same.");
+                throw new Exception("\nPrice stayed the same.");
             }
 
 

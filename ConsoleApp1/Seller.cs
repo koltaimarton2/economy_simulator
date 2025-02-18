@@ -12,10 +12,10 @@ namespace ConsoleApp1
         public List<Product> products { get; set; }
 
 
-        public Seller(string _name)
+        public Seller(string _name, List<Product> _products)
         {
             name = _name;
-            products = new List<Product>();
+            products = _products;
         }
 
        public void addProduct(Product product)

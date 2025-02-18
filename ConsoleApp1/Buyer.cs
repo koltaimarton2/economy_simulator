@@ -26,7 +26,7 @@ namespace ConsoleApp1
             }
             else
             {
-                throw new Exception($"{name} doesn't have enough money.");
+                throw new Exception($"\t{name} doesn't have enough money.\n");
             }
         }
     }
