@@ -70,7 +70,6 @@
                         }
                         try
                         {
-                            //Console.WriteLine(marketDemand + " / " + product.supply);
                             double priceChange = product.adjustPriceAndDemand(marketDemand);
                             if (priceChange > 0)
                             {
@@ -89,7 +88,7 @@
                         {
                             Console.WriteLine(ex.Message.ToString() + "\n");
                         }
-                        Thread.Sleep(250);
+                        Thread.Sleep(150);
 
 
 
@@ -106,17 +105,13 @@
             }
         }
 
-
-        private void Wait(int ms)
-        {
-            //if () ;
-        }
-
         private void TriggerMarketEvent()
         {
             Random rnd = new Random();
 
             int eventCase = rnd.Next(1, 5);
+
+
 
             Console.ForegroundColor = ConsoleColor.Magenta;
 

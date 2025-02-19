@@ -497,6 +497,20 @@
             }
         }
 
+        static void ClearSellerList()
+        {
+            market.sellers.Clear(); 
+            Console.WriteLine("\nSeller list cleared.");
+            Console.ReadKey();
+        }
+
+        static void ClearBuyerList()
+        {
+            market.buyers.Clear();
+            Console.WriteLine("\nBuyer list cleared.");
+            Console.ReadKey();
+        }
+
         static void SimulateMarket()
         {
             Console.Clear();
@@ -532,6 +546,7 @@
                 new Menu("Set products", null, AddSellerProducts),
                 new Menu("Create seller\n", null, CreateSeller),
                 new Menu("Fill up every supply", null, FillUpSupply),
+                new Menu("Clear seller list", null, ClearSellerList),
                 new Menu("List all sellers", null, ListSellers)
             };
 
@@ -540,6 +555,7 @@
                 new Menu("Set budget", null, AddBudget),
                 new Menu("Create buyer\n",null, CreateBuyer),
                 new Menu("Give every buyer money", null, GiveMoney),
+                new Menu("Clear buyer list", null, ClearBuyerList),
                 new Menu("List all buyers", null, ListBuyers)
             };
 
