@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ConsoleApp1
+﻿namespace ConsoleApp1
 {
     internal class Seller
     {
@@ -18,7 +12,7 @@ namespace ConsoleApp1
             products = _products;
         }
 
-       public void addProduct(Product product)
+        public void addProduct(Product product)
         {
             products.Add(product);
         }

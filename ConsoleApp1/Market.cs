@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ConsoleApp1
+﻿namespace ConsoleApp1
 {
     internal class Market
     {
@@ -12,7 +6,6 @@ namespace ConsoleApp1
         public List<Seller> sellers = new List<Seller>();
 
         public bool marketEvents = false;
-
         public void Simulate(int rounds)
         {
             Random random = new Random();
@@ -27,7 +20,7 @@ namespace ConsoleApp1
                     if (random.Next(1, 101) < 25)
                     {
                         TriggerMarketEvent();
-                    } 
+                    }
                 }
 
 
@@ -35,11 +28,15 @@ namespace ConsoleApp1
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine(seller.name + "\n");
+                    Thread.Sleep(150);
+
 
                     foreach (Product product in seller.products)
                     {
                         Console.ForegroundColor = ConsoleColor.Blue;
                         Console.WriteLine($"{product.name} - {product.category} - {product.actualPrice.ToString("N2")}$ - {product.supply} units");
+                        Thread.Sleep(150);
+
                     }
 
                     Console.WriteLine();
@@ -54,20 +51,22 @@ namespace ConsoleApp1
                         List<Buyer> potentialBuyers = buyers.Where(b => b.budget >= product.actualPrice).ToList();
                         for (int j = 0; j < potentialBuyers.Count(); j++)
                         {
-                            if (potentialBuyers[j].budget >= product.actualPrice && random.Next(1,101) < product.demand)
-                        
+                            if (potentialBuyers[j].budget >= product.actualPrice && random.Next(1, 101) < product.demand)
+
+                            {
+                                try
                                 {
-                                    try
-                                        {
-                                            buyers[j].buyProduct(product);
-                                            Console.WriteLine($"\t{potentialBuyers[j].name} bought {product.name} for {product.actualPrice.ToString("N2")}$.\n");
-                                            marketDemand++;
-                                        }
-                                    catch (Exception ex) 
-                                        {
-                                            Console.WriteLine(ex.Message.ToString());
-                                        }
+                                    buyers[j].buyProduct(product);
+                                    Console.WriteLine($"\t{potentialBuyers[j].name} bought {product.name} for {product.actualPrice.ToString("N2")}$.\n");
+                                    marketDemand++;
+                                    Thread.Sleep(150);
                                 }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex.Message.ToString());
+                                    Thread.Sleep(150);
+                                }
+                            }
                         }
                         try
                         {
@@ -76,7 +75,7 @@ namespace ConsoleApp1
                             if (priceChange > 0)
                             {
                                 Console.ForegroundColor = ConsoleColor.Green;
-                                Console.WriteLine($"The price of {product.name} went up {Math.Round(priceChange,2).ToString("N2")}$. It now costs {product.actualPrice.ToString("N2")}$.\n");
+                                Console.WriteLine($"The price of {product.name} went up {Math.Round(priceChange, 2).ToString("N2")}$. It now costs {product.actualPrice.ToString("N2")}$.\n");
                             }
                             else if (priceChange < 0)
                             {
@@ -90,6 +89,8 @@ namespace ConsoleApp1
                         {
                             Console.WriteLine(ex.Message.ToString() + "\n");
                         }
+                        Thread.Sleep(250);
+
 
 
                     }
@@ -101,8 +102,7 @@ namespace ConsoleApp1
         }
 
 
-
-        public void TriggerMarketEvent()
+        private void TriggerMarketEvent()
         {
             Random rnd = new Random();
 
@@ -167,6 +167,9 @@ namespace ConsoleApp1
                     }
                     break;
             }
+
+
+
             Console.ForegroundColor = ConsoleColor.White;
         }
 

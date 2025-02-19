@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-namespace ConsoleApp1
+﻿namespace ConsoleApp1
 {
 
     internal class Menu
@@ -17,9 +14,9 @@ namespace ConsoleApp1
 
         public Menu(string Caption = "", List<Menu>? Items = null, Action? EventHandler = null, string? Title = null)
         {
-            this.Caption = Caption; 
-            this.Items = Items; 
-            MenuHandler = EventHandler;  
+            this.Caption = Caption;
+            this.Items = Items;
+            MenuHandler = EventHandler;
             this.Title = Title;
         }
     }
@@ -29,6 +26,7 @@ namespace ConsoleApp1
         private static Menu options = new Menu();
         private static List<Menu> sellerOptions = new List<Menu>();
         private static List<Menu> buyerOptions = new List<Menu>();
+        private static List<Menu> fillOptions = new List<Menu>();
         private static List<Menu> Options = new List<Menu>();
 
         private static string entityName = null;
@@ -250,13 +248,13 @@ namespace ConsoleApp1
                 Console.WriteLine($"{entityName} added with {entityProducts.Count()} products.");
                 Console.ReadKey();
                 entityName = null;
-                
+
                 entityProducts.Clear();
                 return;
             }
         }
 
-        static void FillUpMarket()
+        static void FillUpMarketSmall()
         {
             Seller Bakery = new Seller("Bakery", new List<Product>
             {
@@ -265,7 +263,7 @@ namespace ConsoleApp1
                 new Product("Bagel", 1.75, "Bakery", 25)
             });
 
-            Seller Grocery =  new Seller("Grocery Store", new List<Product>
+            Seller Grocery = new Seller("Grocery Store", new List<Product>
             {
                 new Product("Apple", 0.75, "Fruits", 50),
                 new Product("Banana", 0.50, "Fruits", 60),
@@ -309,6 +307,86 @@ namespace ConsoleApp1
 
         }
 
+        static void FillUpMarketBig()
+        {
+            Seller Bookstore = new Seller("Bookstore", new List<Product>
+            {
+                new Product("Novel", 12.99, "Books", 100),
+                new Product("Textbook", 40.00, "Books", 20),
+                new Product("Magazine", 5.00, "Books", 50)
+            });
+
+                        Seller Furniture = new Seller("Furniture Shop", new List<Product>
+            {
+                new Product("Sofa", 250.00, "Furniture", 10),
+                new Product("Dining Table", 180.00, "Furniture", 15),
+                new Product("Bookshelf", 80.00, "Furniture", 25)
+            });
+
+                        Seller ToyStore = new Seller("Toy Store", new List<Product>
+            {
+                new Product("Action Figure", 10.50, "Toys", 40),
+                new Product("Lego Set", 45.00, "Toys", 30),
+                new Product("Doll", 12.00, "Toys", 60)
+            });
+
+                        Seller Pharmacy = new Seller("Pharmacy", new List<Product>
+            {
+                new Product("Pain Reliever", 7.00, "Health", 100),
+                new Product("Vitamins", 15.00, "Health", 50),
+                new Product("Bandages", 3.50, "Health", 150)
+            });
+
+                        Seller SportsStore = new Seller("Sports Store", new List<Product>
+            {
+                new Product("Basketball", 20.00, "Sports", 25),
+                new Product("Soccer Ball", 15.00, "Sports", 30),
+                new Product("Yoga Mat", 25.00, "Sports", 10)
+            });
+
+            Buyer Olivia = new Buyer("Olivia", 750);
+            Buyer Liam = new Buyer("Liam", 200);
+            Buyer Noah = new Buyer("Noah", 1000);
+            Buyer Isabella = new Buyer("Isabella", 1500);
+            Buyer Lucas = new Buyer("Lucas", 500);
+            Buyer Ava = new Buyer("Ava", 1200);
+            Buyer Mason = new Buyer("Mason", 350);
+            Buyer Ella = new Buyer("Ella", 900);
+            Buyer Jack = new Buyer("Jack", 150);
+            Buyer Grace = new Buyer("Grace", 1800);
+            Buyer Henry = new Buyer("Henry", 600);
+            Buyer Chloe = new Buyer("Chloe", 800);
+            Buyer Alexander = new Buyer("Alexander", 1300);
+            Buyer Sofia = new Buyer("Sofia", 400);
+            Buyer Benjamin = new Buyer("Benjamin", 2500);
+
+
+            market.sellers.Add(Bookstore);
+            market.sellers.Add(Furniture);
+            market.sellers.Add(ToyStore);
+            market.sellers.Add(Pharmacy);
+            market.sellers.Add(SportsStore);
+
+            market.buyers.Add(Olivia);
+            market.buyers.Add(Liam);
+            market.buyers.Add(Noah);
+            market.buyers.Add(Isabella);
+            market.buyers.Add(Lucas);
+            market.buyers.Add(Ava);
+            market.buyers.Add(Mason);
+            market.buyers.Add(Ella);
+            market.buyers.Add(Jack);
+            market.buyers.Add(Grace);
+            market.buyers.Add(Henry);
+            market.buyers.Add(Chloe);
+            market.buyers.Add(Alexander);
+            market.buyers.Add(Sofia);
+            market.buyers.Add(Benjamin);
+
+            Console.WriteLine($"\nMarket filled up with {market.sellers.Count()} sellers and {market.buyers.Count()} buyers.");
+            Console.ReadKey();
+        }
+
         static void GiveMoney()
         {
             Console.Clear();
@@ -344,7 +422,7 @@ namespace ConsoleApp1
 
         static void ListBuyers()
         {
-            Console.Clear()
+            Console.Clear();
             foreach (Buyer buyer in market.buyers)
             {
                 Console.WriteLine($"{buyer.name} - {buyer.budget}$");
@@ -393,10 +471,11 @@ namespace ConsoleApp1
             Console.Clear();
             foreach (Seller seller in market.sellers)
             {
-                Console.WriteLine($"{seller.name}\nProducts:");
+                Console.WriteLine($"\n{seller.name}");
+                Console.WriteLine("Products:\n");
                 foreach (Product product in seller.products)
                 {
-                    Console.WriteLine($"{product.name} - {product.category} - {product.actualPrice}$ - {product.supply} units");
+                    Console.WriteLine($"\t{product.name} - {product.category} - {product.actualPrice}$ - {product.supply} units");
                 }
             }
             Console.ReadKey();
@@ -436,46 +515,53 @@ namespace ConsoleApp1
                 {
                     Console.WriteLine("Invalid round number. Try again...");
                     Console.ReadKey();
+                    Console.Clear();
                 }
             } while (exit == false);
 
             Console.Clear();
 
             market.Simulate(rounds);
-            
+
         }
 
         static void Menu()
         {
-            sellerOptions =new List<Menu> {
+            sellerOptions = new List<Menu> {
                 new Menu("Set name", null, SetSellerName, "Seller menu"),
-                new Menu("Set products", null, AddSellerProducts, "Seller menu"),
-                new Menu("Create seller", null, CreateSeller, "Seller menu"),
-                new Menu("\nFill up every supply", null, FillUpSupply, "Seller menu"),
-                new Menu("List all sellers", null, ListSellers, "Seller menu"),
+                new Menu("Set products", null, AddSellerProducts),
+                new Menu("Create seller\n", null, CreateSeller),
+                new Menu("Fill up every supply", null, FillUpSupply),
+                new Menu("List all sellers", null, ListSellers)
             };
 
             buyerOptions = new List<Menu> {
                 new Menu("Set name", null, SetBuyerName, "Buyer menu"),
-                new Menu("Set budget", null, AddBudget,"Buyer menu"),
-                new Menu("Create buyer",null, CreateBuyer, "Buyer menu"),
-                new Menu("\nGive every buyer money", null, GiveMoney, "Buyer menu"),
-                new Menu("List all buyers", null, ListBuyers, "Buyer menu"),
+                new Menu("Set budget", null, AddBudget),
+                new Menu("Create buyer\n",null, CreateBuyer),
+                new Menu("Give every buyer money", null, GiveMoney),
+                new Menu("List all buyers", null, ListBuyers)
+            };
+
+            fillOptions = new List<Menu>
+            {
+                new Menu("Small market", null, FillUpMarketSmall, "Market menu"),
+                new Menu("Big market", null, FillUpMarketBig)
             };
 
             options = new Menu("", new List<Menu> {
                 new Menu("Add new seller", sellerOptions,null, "Main menu"),
-                new Menu("Add new buyer", buyerOptions, null, "Main menu"),
-                new Menu("Fill up market", null, FillUpMarket, "Main menu"),
-                new Menu("Sudden market events OFF/ON", null, EnableEvents, "Main menu"),
-                new Menu("Simulate market", null, SimulateMarket, "Main menu")
+                new Menu("Add new buyer", buyerOptions, null),
+                new Menu("Fill up market", fillOptions, null),
+                new Menu("Sudden market events OFF/ON", null, EnableEvents),
+                new Menu("Simulate market", null, SimulateMarket)
             }, null, ""); ;
 
             int index = 0;
             Menu currentMenu = options;
 
             WriteMenu(currentMenu, currentMenu.Items[index]);
-                       
+
 
             ConsoleKeyInfo keyinfo;
             ConsoleKey currentKey;
@@ -488,7 +574,7 @@ namespace ConsoleApp1
                 currentKey = keyinfo.Key;
 
                 index = Move(keyinfo, index, currentMenu);
-                switch(currentKey)
+                switch (currentKey)
                 {
                     case ConsoleKey.Enter:
                         {
@@ -525,10 +611,10 @@ namespace ConsoleApp1
                 }
 
             } while (currentKey != ConsoleKey.Escape);
-        
+
         }
 
-        
+
 
 
 
@@ -537,7 +623,7 @@ namespace ConsoleApp1
         {
             if (menu.Items == null) return 0;
             Menu selectedOption = menu.Items[index];
-            switch(keyinfo.Key)
+            switch (keyinfo.Key)
             {
                 case ConsoleKey.DownArrow:
                     {
@@ -560,7 +646,7 @@ namespace ConsoleApp1
                         }
                         break;
                     }
-                    
+
             }
 
             return index;

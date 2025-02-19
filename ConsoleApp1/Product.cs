@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ConsoleApp1
+﻿namespace ConsoleApp1
 {
     internal class Product
     {
@@ -35,7 +29,7 @@ namespace ConsoleApp1
             {
                 actualPrice *= 1 + priceStep;
                 if (demand <= 100)
-                demand++;
+                    demand++;
                 return actualPrice - lastPrice;
 
             }
@@ -43,7 +37,7 @@ namespace ConsoleApp1
             {
                 actualPrice *= 1 - priceStep;
                 if (demand > 0)
-                demand--;
+                    demand--;
                 return actualPrice - lastPrice;
             }
             else

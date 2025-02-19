@@ -1,21 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ConsoleApp1
+﻿namespace ConsoleApp1
 {
     internal class Buyer
     {
-        public string name {  get; set; }
+        public string name { get; set; }
         public double budget { get; set; }
 
         public Buyer(string _name, double _budget)
         {
             name = _name;
             budget = _budget;
-        } 
+        }
 
         public void buyProduct(Product product)
         {
@@ -29,5 +23,7 @@ namespace ConsoleApp1
                 throw new Exception($"\t{name} doesn't have enough money.\n");
             }
         }
+
+
     }
 }
