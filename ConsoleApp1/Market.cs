@@ -96,11 +96,21 @@
                     }
                 }
 
-                Console.WriteLine($"\nEnd of round {i + 1}. Continue...");
-                Console.ReadKey();
+                Console.WriteLine($"\nEnd of round {i + 1}. Continue... (ENTER)");
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.CursorVisible = false;
+                Console.ReadLine();
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.CursorVisible = true;
+
             }
         }
 
+
+        private void Wait(int ms)
+        {
+            //if () ;
+        }
 
         private void TriggerMarketEvent()
         {
